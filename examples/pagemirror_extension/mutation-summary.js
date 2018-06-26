@@ -111,8 +111,8 @@ var NodeChange = (function () {
         this.characterDataOldValue = characterDataOldValue;
         this.isCaseInsensitive =
             this.node.nodeType === Node.ELEMENT_NODE &&
-                this.node instanceof HTMLElement &&
-                this.node.ownerDocument instanceof HTMLDocument;
+            this.node instanceof HTMLElement &&
+            this.node.ownerDocument instanceof HTMLDocument;
     }
     NodeChange.prototype.getAttributeOldValue = function (name) {
         if (!this.attributeOldValues)

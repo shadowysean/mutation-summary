@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
   if (typeof WebKitMutationObserver !== 'function') {
     var h1 = document.body.appendChild(document.createElement('h3'));
     h1.textContent = 'This example requires Mutation Observers';
@@ -32,12 +32,25 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 
   var base;
+  var port = chrome.tabs.connect(tabId);
 
   var mirror = new TreeMirror(document, {
-    createElement: function(tagName) {
+    createElement: function (tagName) {
       if (tagName == 'SCRIPT') {
         var node = document.createElement('NO-SCRIPT');
         node.style.display = 'none';
+        return node;
+      }
+
+      if (tagName == 'A') {
+        var node = document.createElement('A');
+        node.addEventListener('click', function (e) {
+          e.preventDefault();
+          port.postMessage({
+            f: 'clickEvent',
+            args: ['id']
+          });
+        }, false);
         return node;
       }
 
@@ -50,16 +63,15 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  var port = chrome.tabs.connect(tabId);
-
-  port.onMessage.addListener(function(msg) {
+  port.onMessage.addListener(function (msg) {
     if (msg.base)
       base = msg.base;
-    else
+    else {
       mirror[msg.f].apply(mirror, msg.args);
+    }
   });
 
-  port.onDisconnect.addListener(function(msg) {
+  port.onDisconnect.addListener(function (msg) {
     window.close();
   });
 });
