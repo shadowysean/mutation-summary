@@ -1,4 +1,3 @@
-///<reference path='../src/mutation-summary.ts'/>
 var TreeMirror = (function () {
     function TreeMirror(root, delegate) {
         this.root = root;
