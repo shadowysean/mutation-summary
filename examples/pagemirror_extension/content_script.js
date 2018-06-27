@@ -24,6 +24,7 @@ chrome.extension.onConnect.addListener(function (port) {
 
   var mirrorClient = new TreeMirrorClient(document, {
     initialize: function (rootId, children) {
+      //console.log(rootId);
       port.postMessage({
         f: 'initialize',
         args: [rootId, children]
@@ -31,6 +32,7 @@ chrome.extension.onConnect.addListener(function (port) {
     },
 
     applyChanged: function (removed, addedOrMoved, attributes, text) {
+      console.log(removed, addedOrMoved, attributes);
       port.postMessage({
         f: 'applyChanged',
         args: [removed, addedOrMoved, attributes, text]
@@ -39,7 +41,7 @@ chrome.extension.onConnect.addListener(function (port) {
   });
 
   port.onMessage.addListener(function (msg) {
-    console.log(msg.args);
+    console.log(msg.f);
   })
 
   port.onDisconnect.addListener(function () {

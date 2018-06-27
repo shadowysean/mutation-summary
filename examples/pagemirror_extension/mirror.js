@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function () {
           e.preventDefault();
           port.postMessage({
             f: 'clickEvent',
-            args: ['id']
+            args: [node]
           });
         }, false);
         return node;
